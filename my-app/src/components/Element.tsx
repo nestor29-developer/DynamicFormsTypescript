@@ -1,5 +1,6 @@
 import React from "react";
 import { Fields } from "../interfaces/fields";
+import { NewForm } from "./elements/Form";
 import { Input } from "./elements/Input";
 import { Select } from "./elements/Select";
 import { TextEditor } from "./elements/TextEditor";
@@ -16,7 +17,7 @@ export const Element: React.FC<Fields> = ({
   label_mandatory,
   type,
   error_msg,
-  active,
+  value,
 }) => {
   switch (data_type) {
     case "string":
@@ -37,8 +38,14 @@ export const Element: React.FC<Fields> = ({
       return <Select uid={uid} label={label} field_options={field_options} />;
     case "texteditor":
       return <TextEditor uid={uid} label={label} />;
-    // case "group":
-    //   return  {active} && <TextEditor uid={uid} label={label} />;
+    case "group":
+      return (
+        <NewForm
+          uid={uid}
+          label={label}
+          value={value}
+        />
+      );
     default:
       return null;
   }

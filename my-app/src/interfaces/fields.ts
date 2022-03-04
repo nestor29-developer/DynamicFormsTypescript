@@ -11,5 +11,6 @@ export interface Fields {
     type?: string;
     error_msg?: string;
     active?:boolean;
+    value?:any;
   }
   

@@ -9,9 +9,11 @@ import React from 'react'
 interface Props {
     name?: string;
   }
+ 
 
-export const Relatives = ({ }: Props): JSX.Element => {
+export const Edit: React.FC = () => {
+
     return (
         <div>Relatives</div>
       )
-};
+}

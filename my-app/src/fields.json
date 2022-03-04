@@ -95,36 +95,15 @@
             {
                 "uid": "group",
                 "data_type": "group",
+                "label": "Skills",
                 "value":[
                     {
-                        "uid": "name",
-                        "label": "Fullname",
+                        "id": "1",
+                        "uid": "skill", 
                         "data_type": "string",
-                        "field_value": ""
-                    },
-                    {
-                        "uid": "age",
-                        "label": "Age",
-                        "data_type": "string",
-                        "type": "number",
-                        "field_value": ""
-                    },
-                    {
-                        "uid": "relationship",
-                        "label": "Relationship",
-                        "data_type": "select",
-                        "type": "text",
-                        "field_options": [ 
-                            {
-                                "option_label": "Children"
-                            },
-                            {
-                                "option_label": "Wife/Husband"
-                            }
-                        ],
-                        "field_value": "Children",
-                        "error_msg": "",
-                        "active": false
+                        "field_placeholder": "Enter your skill",
+                        "field_value": "",
+                        "type": "text"
                     }
                 ]
             }
