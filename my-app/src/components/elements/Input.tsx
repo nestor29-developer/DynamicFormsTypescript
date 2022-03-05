@@ -13,11 +13,11 @@ export const Input: React.FC<Fields> = ({
   field_mandatory_active,
   type,
   label_mandatory,
+  index
 }) => {
-  const { handleChange }: any = useContext(FormContext);
-
-  return (
-    <div className="mb-4 form-group">
+  const { handleChange }: any = useContext(FormContext); 
+  return ( 
+    <div className="mb-4 form-group col-6">
       <label htmlFor="inputElement" className="form-label">
         {label} {label_mandatory && <small className="text-danger">*</small>}
       </label>
@@ -28,7 +28,7 @@ export const Input: React.FC<Fields> = ({
         id="inputElement"
         placeholder={field_placeholder ? field_placeholder : ""}
         value={field_value}
-        onChange={(event) => handleChange(uid, event)}
+        onChange={(event) => handleChange(uid, event, "", index)}
       />
       {field_mandatory && field_mandatory_active && error_msg === "" && (
         <small className="text-danger">{label} is Required</small>

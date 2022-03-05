@@ -11,7 +11,7 @@ export const TextEditor: React.FC<Fields> = ({ uid, label }) => {
   const [text, setText] = useState("");
 
   return (
-    <div className="mb-4">
+    <div className="mb-4 mt-3">
       <ReactMarkdown>{label}</ReactMarkdown>
       <div className="editor">
         <CKEditor

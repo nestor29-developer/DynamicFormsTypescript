@@ -16,7 +16,7 @@ import {
 const ElementHome: React.FC = () => {
   const [elements, setElements]: any = useState<[]>([]);
   const [fieldsRequired, setFieldsRequired]: any = useState<[]>([]);
-  const [flagRelatives, setFlagRelatives] = useState<boolean>(false);
+  const [saveForm, setSaveForm] = useState<boolean>(false);
   //   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,61 +31,135 @@ const ElementHome: React.FC = () => {
 
     elements.fields.forEach((field: any) => {
       if (field["field_mandatory"]) {
-        field["field_mandatory"] =
-          field["field_value"].length > 0 && field["error_msg"].length === 0
-            ? false
-            : true;
-        if (field["field_mandatory"]) field["field_mandatory_active"] = true;
-        else if (!field["field_mandatory"] && field["error_msg"].length === 0) {
-          field["field_mandatory_active"] = false;
-          count++;
+        if (
+          field["data_type"] === "checkbox" &&
+          field["value"] &&
+          field["value"].length > 0
+        ) {
+          for (var i = 0; i < field.value.length; i++) { 
+            if (field.value[i]["field_mandatory"]) {
+              field.value[i]["field_mandatory"] =
+                field.value[i]["field_value"].length > 0 ? false : true;
+              if (field.value[i]["field_mandatory"])
+                field.value[i]["field_mandatory_active"] = true;
+              else if (
+                !field.value[i]["field_mandatory"] &&
+                field.value[i]["error_msg"].length === 0
+              ) {
+                field.value[i]["field_mandatory_active"] = false;
+                count++;
+              }
+            }
+          }
+        } else {
+          field["field_mandatory"] =
+            field["field_value"].length > 0 && field["error_msg"].length === 0
+              ? false
+              : true;
+          if (field["field_mandatory"]) field["field_mandatory_active"] = true;
+          else if (
+            !field["field_mandatory"] &&
+            field["error_msg"].length === 0
+          ) {
+            field["field_mandatory_active"] = false;
+            count++;
+          }
         }
+
         setFieldsRequired(field);
       }
     });
 
     elements.fields.forEach((field: any) => {
-      if (field["field_mandatory"]) countMandatory++;
+      if (
+        field["field_mandatory"] &&
+        field["data_type"] === "checkbox" &&
+        field["value"] &&
+        field["value"].length > 0
+      ) {
+        for (var i = 0; i < field.value.length; i++) {
+          if (field.value[i]["field_mandatory"]) countMandatory++;
+        }
+      } else if (field["field_mandatory"]) countMandatory++;
     });
 
     if (count === countMandatory) {
       alert("Saved successfully!!");
       console.log("elements saved by handleSubmit", elements);
-      setFlagRelatives(true);
+      setSaveForm(true);
     } else {
-      setFlagRelatives(false);
+      setSaveForm(false);
     }
   };
 
-  const handleChange = (id: any, event: any, text: any) => {
+  const handleChange = (id: any, event: any, text: any, index: any) => {
     const newElements = { ...elements };
     newElements.fields.forEach((field: any) => {
-      const { data_type, uid } = field;
+      const { data_type, uid, value } = field;
 
       if (id === uid) {
-        field["field_value"] = event.target
-          ? event.target.value
-          : !text.props
-          ? ""
-          : text.props.children.props
-          ? localStorage.getItem("lastTextEditor")
-          : text.props.children;
-        if (!event.target && !text.props.children.props && text.props.children)
-          localStorage.setItem("lastTextEditor", text.props.children);
+        switch (data_type) {
+          case "checkbox":
+            field["checked"] = event.target.checked;
+            field["field_mandatory"] = event.target.checked;
+            if (!field["checked"]) {
+              for (var i = 0; i < field.value.length; i++) {
+                field.value[i]["field_value"] = "";
+                field.value[i]["field_mandatory"] = false;
+                field.value[i]["field_mandatory_active"] = false;
+              }
+            } else {
+              for (var i = 0; i < field.value.length; i++) {
+                field.value[i]["field_mandatory"] = true;
+                field.value[i]["field_mandatory_active"] = true;
+              }
+            }
+            break;
 
-        if (id === "email") {
-          const regEx =
-            /[a-zA-Z0-9._%+--]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
-          if (
-            !regEx.test(field["field_value"]) &&
-            field["field_value"].length > 0
-          )
-            field["error_msg"] = "Email invalid";
-          else field["error_msg"] = "";
+          default:
+            field["field_value"] = event.target
+              ? event.target.value
+              : !text.props
+              ? ""
+              : text.props.children.props
+              ? localStorage.getItem("lastTextEditor")
+              : text.props.children;
+            if (
+              !event.target &&
+              !text.props.children.props &&
+              text.props.children
+            )
+              localStorage.setItem("lastTextEditor", text.props.children);
+
+            if (id === "email") {
+              const regEx =
+                /[a-zA-Z0-9._%+--]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
+              if (
+                !regEx.test(field["field_value"]) &&
+                field["field_value"].length > 0
+              )
+                field["error_msg"] = "Email invalid";
+              else field["error_msg"] = "";
+            }
+
+            field["field_mandatory"] =
+              field["field_value"].length > 0 && field["error_msg"].length === 0
+                ? false
+                : true;
+
+            break;
         }
+      } else if (
+        data_type !== "group" &&
+        value &&
+        value.length > 0 &&
+        index !== undefined
+      ) {
+        field.value[index]["field_value"] = event.target.value;
 
-        field["field_mandatory"] =
-          field["field_value"].length > 0 && field["error_msg"].length === 0
+        field.value[index]["field_mandatory"] =
+          field.value[index]["field_value"].length > 0 &&
+          field.value[index]["error_msg"].length === 0
             ? false
             : true;
       }
@@ -103,7 +177,6 @@ const ElementHome: React.FC = () => {
         <h2 className="mt-2 mb-4 d-flex justify-content-center">
           {page_label}
         </h2>
-        {/* <form> */}
         <div className="row">
           {fields
             ? fields.map((field: any, i: any) => <Element key={i} {...field} />)
@@ -126,7 +199,7 @@ const ElementHome: React.FC = () => {
             </div>
           </div>
 
-          {/* {flagRelatives && (
+          {/* {saveForm && (
               <div className="d-flex justify-content-center">
                 <div className="col-6">
                   <button
@@ -145,7 +218,6 @@ const ElementHome: React.FC = () => {
               </div>
             )} */}
         </div>
-        {/* </form> */}
       </div>
     </FormContext.Provider>
   );

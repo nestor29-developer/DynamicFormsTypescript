@@ -1,5 +1,6 @@
 import React from "react";
 import { Fields } from "../interfaces/fields";
+import { Checkbox } from "./elements/Checkbox";
 import { NewForm } from "./elements/Form";
 import { Input } from "./elements/Input";
 import { Select } from "./elements/Select";
@@ -18,6 +19,7 @@ export const Element: React.FC<Fields> = ({
   type,
   error_msg,
   value,
+  checked,
 }) => {
   switch (data_type) {
     case "string":
@@ -38,14 +40,10 @@ export const Element: React.FC<Fields> = ({
       return <Select uid={uid} label={label} field_options={field_options} />;
     case "texteditor":
       return <TextEditor uid={uid} label={label} />;
+    case "checkbox":
+      return <Checkbox uid={uid} label={label} checked={checked} value={value} />;
     case "group":
-      return (
-        <NewForm
-          uid={uid}
-          label={label}
-          value={value}
-        />
-      );
+      return <NewForm uid={uid} label={label} value={value} />;
     default:
       return null;
   }

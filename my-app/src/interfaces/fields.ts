@@ -12,5 +12,8 @@ export interface Fields {
     error_msg?: string;
     active?:boolean;
     value?:any;
+    checked?:boolean;
+    isShown?:boolean;
+    index?:boolean;
   }
   

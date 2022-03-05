@@ -1,112 +1,145 @@
 [
-    {
-        "page_label": "Dynamic Form",
-        "fields": [
-            {
-                "uid": "fullname",
-                "data_type": "string",
-                "label": "Full Name",
-                "type": "text",
-                "field_mandatory": true,
-                "label_mandatory": true,
-                "field_mandatory_active": false,
-                "field_placeholder": "Enter full name",
-                "field_value": "",
-                "error_msg": ""
-            }, 
-            {
-                "uid": "typedocument",
-                "data_type": "select",
-                "label": "Type of Document",
-                "type": "text", 
-                "field_mandatory": false,
-                "field_options": [ 
-                    {
-                        "option_label": "National Document Number"
-                    },
-                    {
-                        "option_label": "Passport"
-                    },
-                    {
-                        "option_label": "Foreigner's Card"
-                    }
-                ],
-                "field_value": "National Document Number",
-                "error_msg": ""
-            },
-            {
-                "uid": "numberdocument",
-                "data_type": "string",
-                "label": "Number of Document",
-                "field_mandatory": true,
-                "label_mandatory": true,
-                "field_placeholder": "Enter number of document",
-                "type": "number",
-                "field_value": "",
-                "error_msg": ""
-            },
-            {
-                "uid": "gender",
-                "data_type": "select",
-                "label": "Gender",
-                "type": "text",
-                "field_mandatory": false,
-                "field_options": [ 
-                    {
-                        "option_label": "Male"
-                    },
-                    {
-                        "option_label": "Female"
-                    }
-                ],
-                "field_value": "Male",
-                "error_msg": ""
-            },
-            {
-                "uid": "email",
-                "data_type": "string",
-                "label": "Email",
-                "type": "email",
-                "field_mandatory": true,
-                "label_mandatory": true,
-                "field_placeholder": "Enter email",
-                "field_value": "",
-                "error_msg": ""
-            },
-            {
-                "uid": "phone",
-                "data_type": "string",
-                "label": "Phone",
-                "type": "number",
-                "field_mandatory": false,
-                "field_placeholder": "Enter phone",
-                "field_value": "",
-                "error_msg": ""
-            },
-            {
-                "uid": "editor",
-                "data_type": "texteditor",
-                "type": "text",
-                "label": "You optionally can add, edit content, images, links, etc",
-                "field_mandatory": false,
-                "field_value": "",
-                "error_msg": ""
-            },
-            {
-                "uid": "group",
-                "data_type": "group",
-                "label": "Skills",
-                "value":[
-                    {
-                        "id": "1",
-                        "uid": "skill", 
-                        "data_type": "string",
-                        "field_placeholder": "Enter your skill",
-                        "field_value": "",
-                        "type": "text"
-                    }
-                ]
-            }
+  {
+    "page_label": "Dynamic Form",
+    "fields": [
+      {
+        "uid": "fullname",
+        "data_type": "string",
+        "label": "Full Name",
+        "type": "text",
+        "field_mandatory": true,
+        "label_mandatory": true,
+        "field_mandatory_active": false,
+        "field_placeholder": "Enter full name",
+        "field_value": "",
+        "error_msg": ""
+      },
+      {
+        "uid": "gender",
+        "data_type": "select",
+        "label": "Gender",
+        "type": "text",
+        "field_mandatory": false,
+        "field_options": [
+          {
+            "option_label": "Male"
+          },
+          {
+            "option_label": "Female"
+          }
+        ],
+        "field_value": "Male",
+        "error_msg": ""
+      },
+      {
+        "uid": "typedocument",
+        "data_type": "select",
+        "label": "Type of Document",
+        "type": "text",
+        "field_mandatory": false,
+        "field_options": [
+          {
+            "option_label": "National Document Number"
+          },
+          {
+            "option_label": "Passport"
+          },
+          {
+            "option_label": "Foreigner's Card"
+          }
+        ],
+        "field_value": "National Document Number",
+        "error_msg": ""
+      },
+      {
+        "uid": "numberdocument",
+        "data_type": "string",
+        "label": "Number of Document",
+        "field_mandatory": true,
+        "label_mandatory": true,
+        "field_placeholder": "Enter number of document",
+        "type": "number",
+        "field_value": "",
+        "error_msg": ""
+      },
+      {
+        "uid": "email",
+        "data_type": "string",
+        "label": "Email",
+        "type": "email",
+        "field_mandatory": true,
+        "label_mandatory": true,
+        "field_placeholder": "Enter email",
+        "field_value": "",
+        "error_msg": ""
+      },
+      {
+        "uid": "phone",
+        "data_type": "string",
+        "label": "Phone",
+        "type": "number",
+        "field_mandatory": false,
+        "field_placeholder": "Enter phone",
+        "field_value": "",
+        "error_msg": ""
+      },
+      {
+        "uid": "creditCard",
+        "label": "I have a credit card.",
+        "data_type": "checkbox",
+        "checked": false,
+        "field_mandatory": false,
+        "value": [
+          {
+            "uid": "creditCardNumber",
+            "data_type": "string",
+            "label": "Credit Card",
+            "type": "number",
+            "field_mandatory": true,
+            "label_mandatory": false,
+            "field_mandatory_active": false,
+            "field_placeholder": "Enter Number",
+            "field_value": "",
+            "error_msg": ""
+          },
+          {
+            "uid": "creditCardCvv",
+            "data_type": "string",
+            "label": "CVV",
+            "type": "number",
+            "field_mandatory": true,
+            "label_mandatory": false,
+            "field_mandatory_active": false,
+            "field_placeholder": "Enter CVV",
+            "field_value": "",
+            "error_msg": ""
+          }
         ]
-    }
+      },
+      {
+        "uid": "editor",
+        "data_type": "texteditor",
+        "type": "text",
+        "label": "You optionally can add, edit content, images, links, etc",
+        "field_mandatory": false,
+        "field_value": "",
+        "error_msg": ""
+      },
+      {
+        "uid": "group",
+        "data_type": "group",
+        "label": "Skills",
+        "value": [
+          {
+            "id": "1",
+            "uid": "skill",
+            "data_type": "string",
+            "field_placeholder": "Enter your skill",
+            "field_value": "",
+            "type": "text"
+          }
+        ]
+      }
+    ]
+  }
 ]

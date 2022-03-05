@@ -6,7 +6,7 @@ export const Select: React.FC<Fields> = ({ uid, label, field_options }) => {
   const { handleChange }: any = useContext(FormContext);
 
   return (
-    <div className="mb-4">
+    <div className="mb-4 col-6">
       <label className="form-label">{label}</label>
       <select
         className="form-select"
