@@ -3,45 +3,40 @@ import { IoMdAddCircle } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
 import { Fields } from "../../interfaces/fields";
-import { AiOutlineSortDescending, AiOutlineSortAscending } from "react-icons/ai";
+import {
+  AiOutlineSortDescending,
+  AiOutlineSortAscending,
+} from "react-icons/ai";
 
 export const AddGroup: React.FC<Fields> = ({ uid, value, label }) => {
+  let obj: any = [];
 
-  const arrlen = value.length;
-  const val = arrlen===1 ? value[0].uid : null; 
-
-  const [field, setField] = useState([
-    {
-      id: uuidv4(),
-      uid: val,
-      data_type: "string",
-      field_placeholder: "Enter your "+ val,
-      field_value: "",
-      type: "text",
-    },
-  ]); 
+  const [field, setField] = useState(value);
 
   useEffect(() => {
-    setField(value);
     localStorage.clear();
   }, []);
 
   const handleNewField = (e: any): any => {
     e.preventDefault();
-    setField([
-      ...field,
-      {
+    let arr: any = [];
+
+    for (var i = 0; i < value.length; i++) {
+      obj = {
         id: uuidv4(),
-        uid: val,
-        data_type: "string",
-        field_placeholder: "Enter your "+val,
+        uid: value[i].uid,
+        data_type: value[i].data_type,
+        field_placeholder: value[i].field_placeholder,
         field_value: "",
-        type: "text",
-      },
-    ]);
+        type: value[i].type,
+      };
+      arr.push(obj);
+    }
+
+    setField([...field, value.length === 1 ? arr[0] : arr]);
   };
 
-  const handleSortAsc = () => { 
+  const handleSortAsc = () => {
     const sorted = field.sort((a, b): any => {
       const isReserved = 1;
       return isReserved * a.field_value.localeCompare(b.field_value);
@@ -50,7 +45,7 @@ export const AddGroup: React.FC<Fields> = ({ uid, value, label }) => {
     updatedvalues(field);
   };
 
-  const handleSortDesc = () => { 
+  const handleSortDesc = () => {
     const sorted = field.sort((a, b): any => {
       const isReserved = -1;
       return isReserved * a.field_value.localeCompare(b.field_value);
@@ -74,11 +69,11 @@ export const AddGroup: React.FC<Fields> = ({ uid, value, label }) => {
     updatedvalues(updated);
   };
 
-  function updatedvalues(val){
+  function updatedvalues(val) {
     const savedata = {
-      value: val
-    }; 
-   localStorage.setItem(uid+'group', JSON.stringify(savedata));
+      value: val,
+    };
+    localStorage.setItem(uid + "group", JSON.stringify(savedata));
   }
 
   return (
@@ -88,7 +83,7 @@ export const AddGroup: React.FC<Fields> = ({ uid, value, label }) => {
           <h3>
             <IoMdAddCircle
               style={{
-                marginLeft: "64px",
+                marginLeft: "104px",
                 marginTop: "-92.5px",
                 cursor: "pointer",
               }}
