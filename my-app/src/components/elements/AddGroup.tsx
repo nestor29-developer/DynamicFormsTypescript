@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Fields } from "../../interfaces/fields";
 import { AiOutlineSortDescending, AiOutlineSortAscending } from "react-icons/ai";
 
-export const AddForm: React.FC<Fields> = ({ uid, value, label }) => {
+export const AddGroup: React.FC<Fields> = ({ uid, value, label }) => {
 
   const arrlen = value.length;
   const val = arrlen===1 ? value[0].uid : null; 
@@ -23,11 +23,11 @@ export const AddForm: React.FC<Fields> = ({ uid, value, label }) => {
 
   useEffect(() => {
     setField(value);
+    localStorage.clear();
   }, []);
 
   const handleNewField = (e: any): any => {
     e.preventDefault();
-    console.log("value: ", value)
     setField([
       ...field,
       {
@@ -47,6 +47,7 @@ export const AddForm: React.FC<Fields> = ({ uid, value, label }) => {
       return isReserved * a.field_value.localeCompare(b.field_value);
     });
     setField([...sorted]);
+    updatedvalues(field);
   };
 
   const handleSortDesc = () => { 
@@ -55,12 +56,14 @@ export const AddForm: React.FC<Fields> = ({ uid, value, label }) => {
       return isReserved * a.field_value.localeCompare(b.field_value);
     });
     setField([...sorted]);
+    updatedvalues(field);
   };
 
   const handleInputChange = (index: number, event: any) => {
     const values: any = [...field];
     values[index]["field_value"] = event.target.value;
     setField(values);
+    updatedvalues(field);
   };
 
   const handleRemoveFields = (id) => {
@@ -68,7 +71,15 @@ export const AddForm: React.FC<Fields> = ({ uid, value, label }) => {
     let updated: any = [];
     updated = values.filter((field) => field.id !== id);
     setField(updated);
+    updatedvalues(updated);
   };
+
+  function updatedvalues(val){
+    const savedata = {
+      value: val
+    }; 
+   localStorage.setItem(uid+'group', JSON.stringify(savedata));
+  }
 
   return (
     <form onSubmit={handleNewField}>

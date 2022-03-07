@@ -1,7 +1,7 @@
 import React from "react";
 import { Fields } from "../interfaces/fields";
 import { Checkbox } from "./elements/Checkbox";
-import { NewForm } from "./elements/Form";
+import { Group } from "./elements/Group";
 import { Input } from "./elements/Input";
 import { Select } from "./elements/Select";
 import { TextEditor } from "./elements/TextEditor";
@@ -43,7 +43,7 @@ export const Element: React.FC<Fields> = ({
     case "checkbox":
       return <Checkbox uid={uid} label={label} checked={checked} value={value} />;
     case "group":
-      return <NewForm uid={uid} label={label} value={value} />;
+      return <Group uid={uid} label={label} value={value} />;
     default:
       return null;
   }

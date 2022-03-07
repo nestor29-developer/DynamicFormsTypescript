@@ -36,7 +36,7 @@ const ElementHome: React.FC = () => {
           field["value"] &&
           field["value"].length > 0
         ) {
-          for (var i = 0; i < field.value.length; i++) { 
+          for (var i = 0; i < field.value.length; i++) {
             if (field.value[i]["field_mandatory"]) {
               field.value[i]["field_mandatory"] =
                 field.value[i]["field_value"].length > 0 ? false : true;
@@ -85,6 +85,18 @@ const ElementHome: React.FC = () => {
 
     if (count === countMandatory) {
       alert("Saved successfully!!");
+
+      for (var i = 0; i < elements.fields.length; i++) {
+        if (elements.fields[i].data_type === "group") {
+          const nestedgroup: any = localStorage.getItem(elements.fields[i].uid+"group");
+          const converted = JSON.parse(nestedgroup);
+          if (converted) {
+            elements.fields[i].value.length = 0;
+            elements.fields[i].value.push(...converted.value); 
+          }
+        }
+      }
+
       console.log("elements saved by handleSubmit", elements);
       setSaveForm(true);
     } else {

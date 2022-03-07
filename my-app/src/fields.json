@@ -126,7 +126,7 @@
         "error_msg": ""
       },
       {
-        "uid": "group",
+        "uid": "skill",
         "data_type": "group",
         "label": "Skills",
         "value": [
@@ -141,7 +141,7 @@
         ]
       },
       {
-        "uid": "group",
+        "uid": "hobby",
         "data_type": "group",
         "label": "Hobbies",
         "value": [
