@@ -139,6 +139,21 @@
             "type": "text"
           }
         ]
+      },
+      {
+        "uid": "group",
+        "data_type": "group",
+        "label": "Hobbies",
+        "value": [
+          {
+            "id": "1",
+            "uid": "hobbie",
+            "data_type": "string",
+            "field_placeholder": "Enter your hobbie",
+            "field_value": "",
+            "type": "text"
+          }
+        ]
       }
     ]
   }

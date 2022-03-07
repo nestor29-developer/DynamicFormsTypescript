@@ -6,30 +6,35 @@ import { Fields } from "../../interfaces/fields";
 import { AiOutlineSortDescending, AiOutlineSortAscending } from "react-icons/ai";
 
 export const AddForm: React.FC<Fields> = ({ uid, value, label }) => {
-  const [skill, setSkill] = useState([
+
+  const arrlen = value.length;
+  const val = arrlen===1 ? value[0].uid : null; 
+
+  const [field, setField] = useState([
     {
       id: uuidv4(),
-      uid: "skill",
+      uid: val,
       data_type: "string",
-      field_placeholder: "Enter your skill",
+      field_placeholder: "Enter your "+ val,
       field_value: "",
       type: "text",
     },
   ]); 
 
   useEffect(() => {
-    setSkill(value);
+    setField(value);
   }, []);
 
-  const handleNewSkill = (e: any): any => {
+  const handleNewField = (e: any): any => {
     e.preventDefault();
-    setSkill([
-      ...skill,
+    console.log("value: ", value)
+    setField([
+      ...field,
       {
         id: uuidv4(),
-        uid: "skill",
+        uid: val,
         data_type: "string",
-        field_placeholder: "Enter your skill",
+        field_placeholder: "Enter your "+val,
         field_value: "",
         type: "text",
       },
@@ -37,36 +42,36 @@ export const AddForm: React.FC<Fields> = ({ uid, value, label }) => {
   };
 
   const handleSortAsc = () => { 
-    const sorted = skill.sort((a, b): any => {
+    const sorted = field.sort((a, b): any => {
       const isReserved = 1;
       return isReserved * a.field_value.localeCompare(b.field_value);
     });
-    setSkill([...sorted]);
+    setField([...sorted]);
   };
 
   const handleSortDesc = () => { 
-    const sorted = skill.sort((a, b): any => {
+    const sorted = field.sort((a, b): any => {
       const isReserved = -1;
       return isReserved * a.field_value.localeCompare(b.field_value);
     });
-    setSkill([...sorted]);
+    setField([...sorted]);
   };
 
   const handleInputChange = (index: number, event: any) => {
-    const values: any = [...skill];
+    const values: any = [...field];
     values[index]["field_value"] = event.target.value;
-    setSkill(values);
+    setField(values);
   };
 
   const handleRemoveFields = (id) => {
-    const values = [...skill];
+    const values = [...field];
     let updated: any = [];
-    updated = values.filter((skill) => skill.id !== id);
-    setSkill(updated);
+    updated = values.filter((field) => field.id !== id);
+    setField(updated);
   };
 
   return (
-    <form onSubmit={handleNewSkill}>
+    <form onSubmit={handleNewField}>
       <div className="">
         <div className="d-flex align-items-center">
           <h3>
@@ -76,7 +81,7 @@ export const AddForm: React.FC<Fields> = ({ uid, value, label }) => {
                 marginTop: "-92.5px",
                 cursor: "pointer",
               }}
-              onClick={(e) => handleNewSkill(e)}
+              onClick={(e) => handleNewField(e)}
             />
           </h3>
 
@@ -114,8 +119,8 @@ export const AddForm: React.FC<Fields> = ({ uid, value, label }) => {
             </tr>
           </thead>
           <tbody>
-            {skill
-              ? skill.map((field: any, i: any) => (
+            {field
+              ? field.map((field: any, i: any) => (
                   <tr key={i}>
                     <td>
                       <div className="form-group mt-3">
