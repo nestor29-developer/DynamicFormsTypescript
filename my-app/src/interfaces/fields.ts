@@ -15,5 +15,6 @@ export interface Fields {
     checked?:boolean;
     isShown?:boolean;
     index?:boolean;
+    initvalues?:any
   }
   

@@ -1,7 +1,7 @@
 import { Fields } from "../../interfaces/fields";
 import { AddGroup } from "./AddGroup";
 
-export const Group: React.FC<Fields> = ({ uid, label, value }) => {
+export const Group: React.FC<Fields> = ({ uid, label, value, initvalues }) => {
   return (
     <div>
       <div className="card card-body bg-secondary text-dark">
@@ -9,7 +9,7 @@ export const Group: React.FC<Fields> = ({ uid, label, value }) => {
           <h6>{label}</h6>
 
           <div className="mt-3">
-            <AddGroup uid={uid} value={value} label={label} />
+            <AddGroup uid={uid} value={value} label={label} initvalues={initvalues} />
           </div>
         </div>
       </div>

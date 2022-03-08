@@ -20,7 +20,8 @@ export const Element: React.FC<Fields> = ({
   error_msg,
   value,
   checked,
-}) => {
+  initvalues
+}) => { 
   switch (data_type) {
     case "string":
       return (
@@ -43,7 +44,7 @@ export const Element: React.FC<Fields> = ({
     case "checkbox":
       return <Checkbox uid={uid} label={label} checked={checked} value={value} />;
     case "group":
-      return <Group uid={uid} label={label} value={value} />;
+      return <Group uid={uid} label={label} value={value} initvalues={initvalues}/>;
     default:
       return null;
   }

@@ -17,7 +17,12 @@ const ElementHome: React.FC = () => {
   const [elements, setElements]: any = useState<[]>([]);
   const [fieldsRequired, setFieldsRequired]: any = useState<[]>([]);
   const [saveForm, setSaveForm] = useState<boolean>(false);
+
+  localStorage.setItem("array", JSON.stringify(dynamicFormJson[0]));
+  const val: any = localStorage.getItem("array");
+  const [initvalue, setInitvalue] = useState(JSON.parse(val));
   //   const navigate = useNavigate();
+  let initvalues: any = initvalue.fields.filter((e) => e.data_type === "group");
 
   useEffect(() => {
     setElements(dynamicFormJson[0] as any);
@@ -88,11 +93,13 @@ const ElementHome: React.FC = () => {
 
       for (var i = 0; i < elements.fields.length; i++) {
         if (elements.fields[i].data_type === "group") {
-          const nestedgroup: any = localStorage.getItem(elements.fields[i].uid+"group");
+          const nestedgroup: any = localStorage.getItem(
+            elements.fields[i].uid + "group"
+          );
           const converted = JSON.parse(nestedgroup);
           if (converted) {
             elements.fields[i].value.length = 0;
-            elements.fields[i].value.push(...converted.value); 
+            elements.fields[i].value.push(...converted.value);
           }
         }
       }
@@ -191,7 +198,9 @@ const ElementHome: React.FC = () => {
         </h2>
         <div className="row">
           {fields
-            ? fields.map((field: any, i: any) => <Element key={i} {...field} />)
+            ? fields.map((field: any, i: any) => (
+                <Element key={i} {...field} initvalues={initvalues} />
+              ))
             : null}
           <div className="d-flex justify-content-center">
             <div className="col-6">

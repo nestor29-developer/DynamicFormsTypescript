@@ -147,11 +147,42 @@
         "value": [
           {
             "id": "1",
-            "uid": "hobbie",
+            "uid": "hobby",
             "data_type": "string",
-            "field_placeholder": "Enter your hobbie",
+            "field_placeholder": "Enter your hobby",
             "field_value": "",
             "type": "text"
+          }
+        ]
+      },
+      {
+        "uid": "job",
+        "data_type": "group",
+        "label": "Work History",
+        "value": [
+          {
+            "id": "1",
+            "uid": "position",
+            "data_type": "string",
+            "field_placeholder": "Enter position",
+            "field_value": "",
+            "type": "text"
+          },
+          {
+            "id": "2",
+            "uid": "company",
+            "data_type": "string",
+            "field_placeholder": "Enter company",
+            "field_value": "",
+            "type": "text"
+          },
+          {
+            "id": "3",
+            "uid": "years",
+            "data_type": "string",
+            "field_placeholder": "Enter years",
+            "field_value": "",
+            "type": "number"
           }
         ]
       }

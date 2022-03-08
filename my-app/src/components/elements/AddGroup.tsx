@@ -8,20 +8,34 @@ import {
   AiOutlineSortAscending,
 } from "react-icons/ai";
 
-export const AddGroup: React.FC<Fields> = ({ uid, value, label }) => {
+export const AddGroup: React.FC<Fields> = ({
+  uid,
+  value,
+  label,
+  initvalues,
+}) => {
   let obj: any = [];
-
-  const [field, setField] = useState(value);
+  const [fields, setFields] = useState(value);
+  let lengtharr = 0;
+  initvalues.forEach((e) => {
+    if (e.uid === uid) {
+      localStorage.setItem("init"+uid, JSON.stringify(e.value))
+      e.value.forEach(() => {
+        lengtharr++;
+      });
+    }
+  });
 
   useEffect(() => {
-    localStorage.clear();
+    localStorage.removeItem(uid + "group");
   }, []);
 
   const handleNewField = (e: any): any => {
     e.preventDefault();
     let arr: any = [];
-
-    for (var i = 0; i < value.length; i++) {
+    const initval:any = localStorage.getItem("init"+uid);
+    const parseit = JSON.parse(initval);
+    for (var i = 0; i < parseit.length; i++) {
       obj = {
         id: uuidv4(),
         uid: value[i].uid,
@@ -32,40 +46,39 @@ export const AddGroup: React.FC<Fields> = ({ uid, value, label }) => {
       };
       arr.push(obj);
     }
-
-    setField([...field, value.length === 1 ? arr[0] : arr]);
+    setFields([...fields, ...arr]);
   };
 
   const handleSortAsc = () => {
-    const sorted = field.sort((a, b): any => {
+    const sorted = fields.sort((a, b): any => {
       const isReserved = 1;
       return isReserved * a.field_value.localeCompare(b.field_value);
     });
-    setField([...sorted]);
-    updatedvalues(field);
+    setFields([...sorted]);
+    updatedvalues(fields);
   };
 
   const handleSortDesc = () => {
-    const sorted = field.sort((a, b): any => {
+    const sorted = fields.sort((a, b): any => {
       const isReserved = -1;
       return isReserved * a.field_value.localeCompare(b.field_value);
     });
-    setField([...sorted]);
-    updatedvalues(field);
+    setFields([...sorted]);
+    updatedvalues(fields);
   };
 
   const handleInputChange = (index: number, event: any) => {
-    const values: any = [...field];
+    const values: any = [...fields];
     values[index]["field_value"] = event.target.value;
-    setField(values);
-    updatedvalues(field);
+    setFields(values);
+    updatedvalues(fields);
   };
 
   const handleRemoveFields = (id) => {
-    const values = [...field];
+    const values = [...fields];
     let updated: any = [];
     updated = values.filter((field) => field.id !== id);
-    setField(updated);
+    setFields(updated);
     updatedvalues(updated);
   };
 
@@ -91,31 +104,34 @@ export const AddGroup: React.FC<Fields> = ({ uid, value, label }) => {
             />
           </h3>
 
-          <div
-            style={{
-              marginLeft: "64px",
-              marginTop: "-88.5px",
-              cursor: "pointer",
-            }}
-            onClick={() => handleSortAsc()}
-          >
-            <h3>
-              <AiOutlineSortDescending />
-            </h3>
-          </div>
-
-          <div
-            style={{
-              marginLeft: "32px",
-              marginTop: "-88.5px",
-              cursor: "pointer",
-            }}
-            onClick={() => handleSortDesc()}
-          >
-            <h3>
-              <AiOutlineSortAscending />
-            </h3>
-          </div>
+          {lengtharr === 1 && (
+            <>
+              <div
+                style={{
+                  marginLeft: "64px",
+                  marginTop: "-88.5px",
+                  cursor: "pointer",
+                }}
+                onClick={() => handleSortAsc()}
+              >
+                <h3>
+                  <AiOutlineSortDescending />
+                </h3>
+              </div>
+              <div
+                style={{
+                  marginLeft: "32px",
+                  marginTop: "-88.5px",
+                  cursor: "pointer",
+                }}
+                onClick={() => handleSortDesc()}
+              >
+                <h3>
+                  <AiOutlineSortAscending />
+                </h3>
+              </div>
+            </>
+          )}
         </div>
 
         <table className="table">
@@ -125,46 +141,68 @@ export const AddGroup: React.FC<Fields> = ({ uid, value, label }) => {
             </tr>
           </thead>
           <tbody>
-            {field
-              ? field.map((field: any, i: any) => (
-                  <tr key={i}>
-                    <td>
-                      <div className="form-group mt-3">
-                        <input
-                          name={field.uid}
-                          type={field.type}
-                          className="form-control"
-                          value={field.field_value}
-                          style={{ width: "100%" }}
-                          id="inputElement"
-                          placeholder={
-                            field.field_placeholder
-                              ? field.field_placeholder
-                              : ""
-                          }
-                          onChange={(e) => handleInputChange(i, e)}
-                        />
+            {lengtharr === 1 ? (
+              fields.map((field: any, i: any) => (
+                <tr key={i}>
+                  <td className="w-100">
+                    <div className="form-group mt-3">
+                      <input
+                        name={field.uid}
+                        type={field.type}
+                        className="form-control"
+                        value={field.field_value}
+                        id="inputElement"
+                        placeholder={
+                          field.field_placeholder ? field.field_placeholder : ""
+                        }
+                        onChange={(e) => handleInputChange(i, e)}
+                      />
+                    </div>
+                  </td>
+                  <td>
+                    {i > 0 && (
+                      <div
+                        onClick={() => handleRemoveFields(field.id)}
+                        style={{
+                          marginTop: "14px",
+                          marginLeft: "32px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <h3>
+                          <MdDelete />
+                        </h3>
                       </div>
-                    </td>
-                    <td>
-                      {i > 0 && (
-                        <div
-                          onClick={() => handleRemoveFields(field.id)}
-                          style={{
-                            marginTop: "14px",
-                            marginLeft: "32px",
-                            cursor: "pointer",
-                          }}
-                        >
-                          <h3>
-                            <MdDelete />
-                          </h3>
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                ))
-              : null}
+                    )}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "400px 400px 400px",
+                }}
+              >
+                {fields.map((field: any, i: any) => (
+                  <td className="" key={i}>
+                    <div className="form-group mt-3">
+                      <input
+                        name={field.uid}
+                        type={field.type}
+                        className="form-control"
+                        value={field.field_value}
+                        id="inputElement"
+                        placeholder={
+                          field.field_placeholder ? field.field_placeholder : ""
+                        }
+                        onChange={(e) => handleInputChange(i, e)}
+                      />
+                    </div>
+                  </td>
+                ))}
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
