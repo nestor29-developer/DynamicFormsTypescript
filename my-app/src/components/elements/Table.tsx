@@ -10,12 +10,7 @@ import {
 import { render } from "@testing-library/react";
 import React from "react";
 
-export const AddGroup: React.FC<Fields> = ({
-  uid,
-  value,
-  label,
-  initvalues,
-}) => {
+export const Table: React.FC<Fields> = ({ uid, value, label, initvalues }) => {
   let obj: any = [];
   const [fields, setFields] = useState(value);
   const [activateColReal, setActivateColReal] = useState(false);
@@ -124,7 +119,7 @@ export const AddGroup: React.FC<Fields> = ({
     return numberOfRow;
   }
 
-  const createTable = () => {
+  const createBody = () => {
     const getDataStorage: any = localStorage.getItem("init" + uid);
     const colStorage: any = JSON.parse(getDataStorage);
     const colReal: any = fields;
@@ -224,59 +219,57 @@ export const AddGroup: React.FC<Fields> = ({
   };
 
   return (
-    <form onSubmit={handleNewField}>
-      <div className="">
-        <div className="d-flex align-items-center">
-          <h3>
-            <IoMdAddCircle
+    <div>
+      <div className="d-flex align-items-center">
+        <h3>
+          <IoMdAddCircle
+            style={{
+              marginLeft: "104px",
+              marginTop: "-92.5px",
+              cursor: "pointer",
+            }}
+            onClick={(e) => handleNewField(e)}
+          />
+        </h3>
+
+        {lengtharr === 1 && (
+          <>
+            <div
               style={{
-                marginLeft: "104px",
-                marginTop: "-92.5px",
+                marginLeft: "64px",
+                marginTop: "-88.5px",
                 cursor: "pointer",
               }}
-              onClick={(e) => handleNewField(e)}
-            />
-          </h3>
-
-          {lengtharr === 1 && (
-            <>
-              <div
-                style={{
-                  marginLeft: "64px",
-                  marginTop: "-88.5px",
-                  cursor: "pointer",
-                }}
-                onClick={() => handleSortAsc()}
-              >
-                <h3>
-                  <AiOutlineSortDescending />
-                </h3>
-              </div>
-              <div
-                style={{
-                  marginLeft: "32px",
-                  marginTop: "-88.5px",
-                  cursor: "pointer",
-                }}
-                onClick={() => handleSortDesc()}
-              >
-                <h3>
-                  <AiOutlineSortAscending />
-                </h3>
-              </div>
-            </>
-          )}
-        </div>
-
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">{label}</th>
-            </tr>
-          </thead>
-          <tbody>{createTable()}</tbody>
-        </table>
+              onClick={() => handleSortAsc()}
+            >
+              <h3>
+                <AiOutlineSortDescending />
+              </h3>
+            </div>
+            <div
+              style={{
+                marginLeft: "32px",
+                marginTop: "-88.5px",
+                cursor: "pointer",
+              }}
+              onClick={() => handleSortDesc()}
+            >
+              <h3>
+                <AiOutlineSortAscending />
+              </h3>
+            </div>
+          </>
+        )}
       </div>
-    </form>
+
+      <table className="table">
+        <thead>
+          <tr>
+            <th scope="col">{label}</th>
+          </tr>
+        </thead>
+        <tbody>{createBody()}</tbody>
+      </table>
+    </div>
   );
 };

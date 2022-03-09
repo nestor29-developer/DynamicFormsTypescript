@@ -1,5 +1,5 @@
 import { Fields } from "../../interfaces/fields";
-import { AddGroup } from "./AddGroup";
+import { Table } from "./Table";
 
 export const Group: React.FC<Fields> = ({ uid, label, value, initvalues }) => {
   return (
@@ -9,7 +9,7 @@ export const Group: React.FC<Fields> = ({ uid, label, value, initvalues }) => {
           <h6>{label}</h6>
 
           <div className="mt-3">
-            <AddGroup uid={uid} value={value} label={label} initvalues={initvalues} />
+            <Table uid={uid} value={value} label={label} initvalues={initvalues} />
           </div>
         </div>
       </div>

@@ -154,7 +154,7 @@
             "type": "text"
           },
           {
-            "id": "1",
+            "id": "2",
             "uid": "hours",
             "data_type": "string",
             "field_placeholder": "Enter hours dedicated",
