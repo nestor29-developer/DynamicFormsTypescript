@@ -7,6 +7,8 @@ import {
   AiOutlineSortDescending,
   AiOutlineSortAscending,
 } from "react-icons/ai";
+import { render } from "@testing-library/react";
+import React from "react";
 
 export const AddGroup: React.FC<Fields> = ({
   uid,
@@ -16,10 +18,11 @@ export const AddGroup: React.FC<Fields> = ({
 }) => {
   let obj: any = [];
   const [fields, setFields] = useState(value);
+  const [activateColReal, setActivateColReal] = useState(false);
   let lengtharr = 0;
   initvalues.forEach((e) => {
     if (e.uid === uid) {
-      localStorage.setItem("init"+uid, JSON.stringify(e.value))
+      localStorage.setItem("init" + uid, JSON.stringify(e.value));
       e.value.forEach(() => {
         lengtharr++;
       });
@@ -33,7 +36,7 @@ export const AddGroup: React.FC<Fields> = ({
   const handleNewField = (e: any): any => {
     e.preventDefault();
     let arr: any = [];
-    const initval:any = localStorage.getItem("init"+uid);
+    const initval: any = localStorage.getItem("init" + uid);
     const parseit = JSON.parse(initval);
     for (var i = 0; i < parseit.length; i++) {
       obj = {
@@ -47,6 +50,8 @@ export const AddGroup: React.FC<Fields> = ({
       arr.push(obj);
     }
     setFields([...fields, ...arr]);
+    setActivateColReal(true);
+    updatedRows(uid);
   };
 
   const handleSortAsc = () => {
@@ -72,6 +77,7 @@ export const AddGroup: React.FC<Fields> = ({
     values[index]["field_value"] = event.target.value;
     setFields(values);
     updatedvalues(fields);
+    setActivateColReal(true);
   };
 
   const handleRemoveFields = (id) => {
@@ -80,6 +86,9 @@ export const AddGroup: React.FC<Fields> = ({
     updated = values.filter((field) => field.id !== id);
     setFields(updated);
     updatedvalues(updated);
+    let newrow = getLastRow(uid);
+    --newrow
+    localStorage.setItem("count" + uid, newrow);
   };
 
   function updatedvalues(val) {
@@ -88,6 +97,100 @@ export const AddGroup: React.FC<Fields> = ({
     };
     localStorage.setItem(uid + "group", JSON.stringify(savedata));
   }
+
+  function updatedRows(val) { 
+    const getStorage: any = localStorage.getItem("count" + val);
+    const existsStorage = JSON.parse(getStorage);
+    if (existsStorage) {
+      let lastRow = existsStorage;
+      lastRow++;
+      localStorage.setItem("count" + val, lastRow);
+    } else {
+      localStorage.setItem("count" + val, "2");
+    }
+  }
+
+  function getLastRow(val) {
+    const getStorage: any = localStorage.getItem("count" + val);
+    let numberOfRow = JSON.parse(getStorage);
+    return numberOfRow;
+  }
+
+  const createTable = () => { 
+    const getDataStorage: any = localStorage.getItem("init" + uid);
+    const colStorage: any = JSON.parse(getDataStorage);
+    const colReal: any = fields;
+    if (colStorage.length === colReal.length) {
+      localStorage.removeItem("count" + uid);
+    }
+    const col: any = activateColReal ? colReal : colStorage;
+    const rows = getLastRow(uid);
+
+    const raw: any = rows ? rows : 1;
+
+    let table: any = [];
+
+    for (let i = 0; i < raw; i++) {
+      let children: any = [];
+
+      for (let j = 0; j < colStorage.length; j++) {
+        children.push(
+          <td key={j}>
+            <div className="form-group mt-3 d-flex align-items-center">
+              <input
+                name={
+                  colStorage.length === 1
+                    ? col[i].uid
+                    : col[j + i * colStorage.length].uid
+                }
+                type={
+                  colStorage.length > 1
+                    ? col[j + i * colStorage.length].type
+                    : col[i].type
+                }
+                className="form-control"
+                value={
+                  colStorage.length > 1
+                    ? col[j + i * colStorage.length].field_value
+                    : col[i].field_value
+                }
+                id="inputElement"
+                placeholder={
+                  colStorage.length > 1
+                    ? col[j + i * colStorage.length].field_placeholder
+                    : col[i].field_placeholder
+                }
+                onChange={(e) =>
+                  handleInputChange(
+                    colStorage.length > 1 ? j + i * colStorage.length : i,
+                    e
+                  )
+                }
+              />
+
+              <div>
+                {lengtharr === 1 && i > 0 && (
+                  <div
+                    onClick={() => handleRemoveFields(col[i].id)}
+                    style={{
+                      marginLeft: "22px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <h3>
+                      <MdDelete />
+                    </h3>
+                  </div>
+                )}
+              </div>
+            </div>
+          </td>
+        );
+      }
+      table.push(<tr key={i}>{children}</tr>);
+    }
+    return table;
+  };
 
   return (
     <form onSubmit={handleNewField}>
@@ -140,70 +243,79 @@ export const AddGroup: React.FC<Fields> = ({
               <th scope="col">{label}</th>
             </tr>
           </thead>
+          <tbody>{createTable()}</tbody>
+
+          {/* <thead>
+            <tr>
+              <th scope="col">{label}</th>
+            </tr>
+          </thead>
           <tbody>
-            {lengtharr === 1 ? (
-              fields.map((field: any, i: any) => (
-                <tr key={i}>
-                  <td className="w-100">
-                    <div className="form-group mt-3">
-                      <input
-                        name={field.uid}
-                        type={field.type}
-                        className="form-control"
-                        value={field.field_value}
-                        id="inputElement"
-                        placeholder={
-                          field.field_placeholder ? field.field_placeholder : ""
-                        }
-                        onChange={(e) => handleInputChange(i, e)}
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    {i > 0 && (
-                      <div
-                        onClick={() => handleRemoveFields(field.id)}
-                        style={{
-                          marginTop: "14px",
-                          marginLeft: "32px",
-                          cursor: "pointer",
-                        }}
-                      >
-                        <h3>
-                          <MdDelete />
-                        </h3>
+            {lengtharr === 1
+              ? fields.map((field: any, i: any) => (
+                  <tr key={i}>
+                    <td className="w-100">
+                      <div className="form-group mt-3">
+                        <input
+                          name={field.uid}
+                          type={field.type}
+                          className="form-control"
+                          value={field.field_value}
+                          id="inputElement"
+                          placeholder={
+                            field.field_placeholder
+                              ? field.field_placeholder
+                              : ""
+                          }
+                          onChange={(e) => handleInputChange(i, e)}
+                        />
                       </div>
-                    )}
-                  </td>
+                    </td>
+                    <td>
+                      {i > 0 && (
+                        <div
+                          onClick={() => handleRemoveFields(field.id)}
+                          style={{
+                            marginTop: "14px",
+                            marginLeft: "32px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          <h3>
+                            <MdDelete />
+                          </h3>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              :   
+                <tr
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "400px 400px 400px",
+                  }}
+                >
+                  {fields.map((field: any, i: any) => (
+                    <td className="" key={i}>
+                      <div className="form-group mt-3">
+                        <input
+                          name={field.uid}
+                          type={field.type}
+                          className="form-control"
+                          value={field.field_value}
+                          id="inputElement"
+                          placeholder={
+                            field.field_placeholder ? field.field_placeholder : ""
+                          }
+                          onChange={(e) => handleInputChange(i, e)}
+                        />
+                      </div>
+                    </td>
+                  ))}
                 </tr>
-              ))
-            ) : (
-              <tr
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "400px 400px 400px",
-                }}
-              >
-                {fields.map((field: any, i: any) => (
-                  <td className="" key={i}>
-                    <div className="form-group mt-3">
-                      <input
-                        name={field.uid}
-                        type={field.type}
-                        className="form-control"
-                        value={field.field_value}
-                        id="inputElement"
-                        placeholder={
-                          field.field_placeholder ? field.field_placeholder : ""
-                        }
-                        onChange={(e) => handleInputChange(i, e)}
-                      />
-                    </div>
-                  </td>
-                ))}
-              </tr>
-            )}
-          </tbody>
+            }
+          </tbody> */}
         </table>
       </div>
     </form>

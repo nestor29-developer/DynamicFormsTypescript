@@ -152,6 +152,14 @@
             "field_placeholder": "Enter your hobby",
             "field_value": "",
             "type": "text"
+          },
+          {
+            "id": "1",
+            "uid": "hours",
+            "data_type": "string",
+            "field_placeholder": "Enter hours dedicated",
+            "field_value": "",
+            "type": "number"
           }
         ]
       },
@@ -183,6 +191,14 @@
             "field_placeholder": "Enter years",
             "field_value": "",
             "type": "number"
+          },
+          {
+            "id": "4",
+            "uid": "boss",
+            "data_type": "string",
+            "field_placeholder": "Enter boss",
+            "field_value": "",
+            "type": "string"
           }
         ]
       }
