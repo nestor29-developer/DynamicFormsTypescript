@@ -87,7 +87,7 @@ export const AddGroup: React.FC<Fields> = ({
     setFields(updated);
     updatedvalues(updated);
     let newrow = getLastRow(uid);
-    --newrow
+    --newrow;
     localStorage.setItem("count" + uid, newrow);
   };
 
@@ -98,7 +98,7 @@ export const AddGroup: React.FC<Fields> = ({
     localStorage.setItem(uid + "group", JSON.stringify(savedata));
   }
 
-  function updatedRows(val) { 
+  function updatedRows(val) {
     const getStorage: any = localStorage.getItem("count" + val);
     const existsStorage = JSON.parse(getStorage);
     if (existsStorage) {
@@ -116,7 +116,7 @@ export const AddGroup: React.FC<Fields> = ({
     return numberOfRow;
   }
 
-  const createTable = () => { 
+  const createTable = () => {
     const getDataStorage: any = localStorage.getItem("init" + uid);
     const colStorage: any = JSON.parse(getDataStorage);
     const colReal: any = fields;
@@ -244,78 +244,6 @@ export const AddGroup: React.FC<Fields> = ({
             </tr>
           </thead>
           <tbody>{createTable()}</tbody>
-
-          {/* <thead>
-            <tr>
-              <th scope="col">{label}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lengtharr === 1
-              ? fields.map((field: any, i: any) => (
-                  <tr key={i}>
-                    <td className="w-100">
-                      <div className="form-group mt-3">
-                        <input
-                          name={field.uid}
-                          type={field.type}
-                          className="form-control"
-                          value={field.field_value}
-                          id="inputElement"
-                          placeholder={
-                            field.field_placeholder
-                              ? field.field_placeholder
-                              : ""
-                          }
-                          onChange={(e) => handleInputChange(i, e)}
-                        />
-                      </div>
-                    </td>
-                    <td>
-                      {i > 0 && (
-                        <div
-                          onClick={() => handleRemoveFields(field.id)}
-                          style={{
-                            marginTop: "14px",
-                            marginLeft: "32px",
-                            cursor: "pointer",
-                          }}
-                        >
-                          <h3>
-                            <MdDelete />
-                          </h3>
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                ))
-              :   
-                <tr
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "400px 400px 400px",
-                  }}
-                >
-                  {fields.map((field: any, i: any) => (
-                    <td className="" key={i}>
-                      <div className="form-group mt-3">
-                        <input
-                          name={field.uid}
-                          type={field.type}
-                          className="form-control"
-                          value={field.field_value}
-                          id="inputElement"
-                          placeholder={
-                            field.field_placeholder ? field.field_placeholder : ""
-                          }
-                          onChange={(e) => handleInputChange(i, e)}
-                        />
-                      </div>
-                    </td>
-                  ))}
-                </tr>
-            }
-          </tbody> */}
         </table>
       </div>
     </form>
