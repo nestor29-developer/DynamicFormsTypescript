@@ -80,12 +80,20 @@ export const AddGroup: React.FC<Fields> = ({
     setActivateColReal(true);
   };
 
-  const handleRemoveFields = (id) => {
-    const values = [...fields];
-    let updated: any = [];
-    updated = values.filter((field) => field.id !== id);
-    setFields(updated);
-    updatedvalues(updated);
+  const handleRemoveFields = (id, col?, position?) => {
+    let values = [...fields];
+    if (col && position) {
+      let num = position;
+      for (let index = 0; index < col; index++) {
+        const idvalue = values[num].id;
+
+        values = values.filter((field) => field.id !== idvalue);
+        num--;
+      }
+    } else values = values.filter((field) => field.id !== id);
+
+    setFields(values);
+    updatedvalues(values);
     let newrow = getLastRow(uid);
     --newrow;
     localStorage.setItem("count" + uid, newrow);
@@ -169,6 +177,28 @@ export const AddGroup: React.FC<Fields> = ({
               />
 
               <div>
+                {lengtharr > 1 && i > 0 && colStorage.length - j == 1 && (
+                  <div
+                    onClick={() =>
+                      handleRemoveFields(
+                        col[j + i * colStorage.length].id,
+                        colStorage.length,
+                        j + i * colStorage.length
+                      )
+                    }
+                    style={{
+                      marginLeft: "22px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <h3>
+                      <MdDelete />
+                    </h3>
+                  </div>
+                )}
+              </div>
+
+              <div>
                 {lengtharr === 1 && i > 0 && (
                   <div
                     onClick={() => handleRemoveFields(col[i].id)}
@@ -187,6 +217,7 @@ export const AddGroup: React.FC<Fields> = ({
           </td>
         );
       }
+
       table.push(<tr key={i}>{children}</tr>);
     }
     return table;
