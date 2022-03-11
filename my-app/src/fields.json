@@ -201,6 +201,52 @@
             "type": "string"
           }
         ]
+      },
+
+      {
+        "uid": "studies",
+        "data_type": "group",
+        "label": "Education",
+        "value": [
+          {
+            "id": "1",
+            "uid": "collegue",
+            "data_type": "string",
+            "field_placeholder": "Enter collegue",
+            "field_value": "",
+            "type": "text"
+          },
+          {
+            "id": "2",
+            "uid": "level",
+            "data_type": "string",
+            "field_placeholder": "Enter level of education",
+            "field_value": "",
+            "type": "string"
+          },
+          {
+            "uid": "subjects",
+            "data_type": "group",
+            "value": [
+              {
+                "id": "1",
+                "uid": "subject",
+                "data_type": "string",
+                "field_placeholder": "Enter subject",
+                "field_value": "",
+                "type": "string"
+              },
+              {
+                "id": "2",
+                "uid": "year",
+                "data_type": "string",
+                "field_placeholder": "Enter year of finish",
+                "field_value": "",
+                "type": "number"
+              }
+            ]
+          }
+        ]
       }
     ]
   }

@@ -90,7 +90,6 @@ const ElementHome: React.FC = () => {
 
     if (count === countMandatory) {
       alert("Saved successfully!!");
-
       for (var i = 0; i < elements.fields.length; i++) {
         if (elements.fields[i].data_type === "group") {
           const nestedgroup: any = localStorage.getItem(
@@ -98,8 +97,22 @@ const ElementHome: React.FC = () => {
           );
           const converted = JSON.parse(nestedgroup);
           if (converted) {
-            elements.fields[i].value.length = 0;
-            elements.fields[i].value.push(...converted.value);
+            const row = converted.value.length;
+            if (row) {
+              for (let index = 0; index < row; index++) {
+                if (converted.value[index].data_type === "group") {
+                  const nestedgroup: any = localStorage.getItem(
+                    converted.value[index].uid + "childrengroup"
+                  );
+                  const convertednested = JSON.parse(nestedgroup);
+                  elements.fields[i].value.length = 0;
+                  elements.fields[i].value.push(...convertednested.value);
+                } else {
+                  elements.fields[i].value.length = 0;
+                  elements.fields[i].value.push(...converted.value);
+                }
+              }
+            }
           }
         }
       }
