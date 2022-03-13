@@ -34,6 +34,7 @@ export const Table: React.FC<Fields> = ({ uid, value, label, initvalues }) => {
   const handleNewField = (e: any): any => {
     e.preventDefault();
     let arr: any = [];
+
     const initval: any = localStorage.getItem("init" + uid);
     const parseit = JSON.parse(initval);
     for (var i = 0; i < parseit.length; i++) {
@@ -62,6 +63,7 @@ export const Table: React.FC<Fields> = ({ uid, value, label, initvalues }) => {
         obj = {
           uid: value[i].uid,
           data_type: value[i].data_type,
+          label: value[i].label,
           value: valuesnested,
         };
       }
@@ -80,26 +82,71 @@ export const Table: React.FC<Fields> = ({ uid, value, label, initvalues }) => {
     setActivateColReal(true);
   };
 
-  const handleInputChangeNested = (index: number, event: any, position) => {
-    fields.filter((x) => x.data_type === "group")[position].value[index][
-      "field_value"
-    ] = event.target.value;
-    const name = fields.filter((x) => x.data_type === "group")[position].uid;
+  const handleInputChangeNested = (event: any, uidvalue, id) => {
+    let arrchildren: any = [];
+    fields
+      .filter((x) => x.data_type === "group")
+      .forEach((e, i) => {
+        if (e.uid === uidvalue) {
+          fields
+            .filter((x) => x.data_type === "group")
+            [i].value.forEach((element) => {
+              if (element.id === id) {
+                element.field_value = event.target.value;
+              }
+            });
+          arrchildren.push(...e.value);
+        }
+      });
+
     setFields([...fields]);
-    updatedvalues(fields, name + "children");
+    updatedvalues(arrchildren, uidvalue + "children");
     setActivateColRealNested(true);
   };
 
-  const handleNewFieldNested = (e: any, uidchildren, position): any => {
+  const handleNewFieldNested = (
+    e: any,
+    uidvalue,
+    uidchildren,
+    uidparent,
+    row
+  ): any => {
     e.preventDefault();
     const getRow = getLastRow(uidchildren);
-
     if (getRow) {
       let arr: any = [];
       const initval: any = localStorage.getItem("init" + uid);
       let parseit = JSON.parse(initval);
-      parseit = parseit.filter((x) => x.data_type === "group")[0].value;
-      const val = fields.filter((x) => x.data_type === "group")[position].value; // value.filter((x) => x.data_type === "group")[position].value;
+      parseit = parseit.filter((x) => x.data_type === "group");
+      parseit.forEach((e, i) => {
+        if (e.uid === uidvalue) {
+          parseit = parseit[i].value;
+        }
+      });
+      const rowsParent = getLastRow(uidparent);
+      let val = fields.filter((x) => x.data_type === "group");
+
+      if (rowsParent === 0 || rowsParent === null) {
+        val.forEach((e, i) => {
+          if (e.uid === uidvalue) {
+            val = val[i].value;
+          }
+        });
+      } else {
+        const numrows = val.length / rowsParent;
+        const min = row * numrows;
+        const max = numrows * row + numrows;
+        let arr: any = [];
+        for (let index = min; index < max; index++) {
+          arr.push(val[index]);
+        }
+        val = arr;
+        val.forEach((e, i) => {
+          if (e.uid === uidvalue) {
+            val = val[i].value;
+          }
+        });
+      }
 
       for (var i = 0; i < parseit.length; i++) {
         obj = {
@@ -112,9 +159,32 @@ export const Table: React.FC<Fields> = ({ uid, value, label, initvalues }) => {
         };
         arr.push(obj);
       }
-      fields
-        .filter((x) => x.data_type === "group")
-        [position].value.push(...arr);
+
+      const rowpar = rowsParent ? rowsParent : 1;
+
+      if (rowpar === 1) {
+        fields
+          .filter((x) => x.data_type === "group")
+          .forEach((e, i) => {
+            if (e.uid === uidvalue) {
+              fields
+                .filter((x) => x.data_type === "group")
+                [i].value.push(...arr);
+            }
+          });
+      } else {
+        fields
+          .filter((x) => x.data_type === "group")
+          .filter((x) => x.uid === uidvalue)
+          .forEach((e, index) => {
+            if (index === row) {
+              fields
+                .filter((x) => x.data_type === "group" && x.uid === uidvalue)
+                [index].value.push(...arr);
+            }
+          });
+      }
+
       setFields([...fields]);
     }
     setFields([...fields]);
@@ -205,21 +275,54 @@ export const Table: React.FC<Fields> = ({ uid, value, label, initvalues }) => {
     }
   }
 
-  const createNestedTable = (nesteduid, array, index) => {
+  const createNestedTable = (nesteduid, array, row, uidvalue, uidparent) => {
     let tableNested: any = [];
     const initval: any = localStorage.getItem("init" + uid);
     let parseit = JSON.parse(initval);
-    parseit = parseit.filter((x) => x.data_type === "group")[0].value;
-    const val = array.filter((x) => x.data_type === "group")[index].value;
+    parseit = parseit.filter((x) => x.data_type === "group");
+    parseit.forEach((e, i) => {
+      if (e.uid === uidvalue) {
+        parseit = parseit[i].value;
+      }
+    });
+    updatedvalues(fields);
+
+    const rowsParent = getLastRow(uidparent);
+
+    let val = array.filter((x) => x.data_type === "group");
+
+    // let countarr:any = [];
+
+    if (rowsParent === 0 || rowsParent === null) {
+      val.forEach((e, i) => {
+        if (e.uid === uidvalue) {
+          val = val[i].value;
+        }
+      });
+    } else {
+      const numrows = val.length / rowsParent;
+      const min = row * numrows;
+      const max = numrows * row + numrows;
+      let arr: any = [];
+      for (let index = min; index < max; index++) {
+        arr.push(val[index]);
+      }
+      val = arr;
+      val.forEach((e, i) => {
+        if (e.uid === uidvalue) {
+          val = val[i].value;
+        }
+      });
+    }
+
     if (parseit.length === val.length && !activateColRealNested) {
       removeChildrenRows(nesteduid);
     }
 
-    const getRow = getLastRow(nesteduid + index);
+    const getRow = getLastRow(nesteduid + row);
     if (getRow) {
       const row = getRow;
       const col: any = val;
-
       for (let i = 0; i < row; i++) {
         let childrenNested: any = [];
 
@@ -235,7 +338,11 @@ export const Table: React.FC<Fields> = ({ uid, value, label, initvalues }) => {
                   id="inputElement"
                   placeholder={col[j + i * parseit.length].field_placeholder}
                   onChange={(e) =>
-                    handleInputChangeNested(j + i * parseit.length, e, index)
+                    handleInputChangeNested(
+                      e,
+                      uidvalue,
+                      col[j + i * parseit.length].id
+                    )
                   }
                 />
               </div>
@@ -272,7 +379,6 @@ export const Table: React.FC<Fields> = ({ uid, value, label, initvalues }) => {
     let table: any = [];
     for (let i = 0; i < raw; i++) {
       let children: any = [];
-
       for (let j = 0; j < colStorage.length; j++) {
         children.push(
           <td key={j}>
@@ -354,28 +460,39 @@ export const Table: React.FC<Fields> = ({ uid, value, label, initvalues }) => {
 
               {col[j + i * colStorage.length].data_type === "group" && (
                 <div className="col">
-                  <h3>
-                    <CgPlayListAdd
-                      style={{
-                        color: "blue",
-                        cursor: "pointer",
-                      }}
-                      onClick={(e) =>
-                        handleNewFieldNested(
-                          e,
-                          col[j + i * colStorage.length].uid + "children" + i,
-                          i
-                        )
-                      }
-                    />
-                  </h3>
+                  <div className="d-flex">
+                    <div className="mt-1" style={{ marginRight: "16px" }}>
+                      <h6>{col[j + i * colStorage.length].label!}</h6>
+                    </div>
+
+                    <h3>
+                      <CgPlayListAdd
+                        style={{
+                          color: "blue",
+                          cursor: "pointer",
+                        }}
+                        onClick={(e) =>
+                          handleNewFieldNested(
+                            e,
+                            col[j + i * colStorage.length].uid,
+                            col[j + i * colStorage.length].uid + "children" + i,
+                            uid,
+                            i
+                          )
+                        }
+                      />
+                    </h3>
+                  </div>
+
                   <div>
                     <table className="table table-bordered mt-4">
                       <tbody>
                         {createNestedTable(
                           col[j + i * colStorage.length].uid + "children",
                           col,
-                          i
+                          i,
+                          col[j + i * colStorage.length].uid,
+                          uid
                         )}
                       </tbody>
                     </table>

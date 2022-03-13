@@ -225,7 +225,16 @@
             "type": "string"
           },
           {
+            "id": "3",
+            "uid": "teacher",
+            "data_type": "string",
+            "field_placeholder": "Enter teacher",
+            "field_value": "",
+            "type": "string"
+          },
+          {
             "uid": "subjects",
+            "label": "Courses",
             "data_type": "group",
             "value": [
               {
@@ -241,6 +250,37 @@
                 "uid": "year",
                 "data_type": "string",
                 "field_placeholder": "Enter year of finish",
+                "field_value": "",
+                "type": "number"
+              },
+              {
+                "id": "3",
+                "uid": "grade",
+                "data_type": "string",
+                "field_placeholder": "Enter grade",
+                "field_value": "",
+                "type": "number"
+              }
+            ]
+          },
+          {
+            "uid": "tools",
+            "label": "Tools",
+            "data_type": "group",
+            "value": [
+              {
+                "id": "1",
+                "uid": "name",
+                "data_type": "string",
+                "field_placeholder": "Enter name",
+                "field_value": "",
+                "type": "string"
+              },
+              {
+                "id": "2",
+                "uid": "price",
+                "data_type": "string",
+                "field_placeholder": "Enter price",
                 "field_value": "",
                 "type": "number"
               }

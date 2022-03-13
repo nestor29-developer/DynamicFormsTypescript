@@ -100,16 +100,10 @@ const ElementHome: React.FC = () => {
             const row = converted.value.length;
             if (row) {
               for (let index = 0; index < row; index++) {
-                if (converted.value[index].data_type === "group") {
-                  const nestedgroup: any = localStorage.getItem(
-                    converted.value[index].uid + "childrengroup"
-                  );
-                  const convertednested = JSON.parse(nestedgroup);
-                  elements.fields[i].value.length = 0;
-                  elements.fields[i].value.push(...convertednested.value);
-                } else {
+                if (converted.value[index].data_type !== "group") {
                   elements.fields[i].value.length = 0;
                   elements.fields[i].value.push(...converted.value);
+                  break;
                 }
               }
             }
